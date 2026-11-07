@@ -43,7 +43,7 @@ export function initClerk(): Promise<Clerk> {
   pending = (async () => {
     const publishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
     if (!publishableKey) {
-      return null as unknown as Clerkt
+          return null as unknown as Clerk
     }
 
     const clerkDomain = atob(publishableKey.split('_')[2]).slice(0, -1)

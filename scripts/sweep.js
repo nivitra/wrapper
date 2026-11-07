@@ -1,6 +1,6 @@
 (async () => {
   const { composeDraft } = await import('/src/ai/fallback.ts')
-  const { renderSlide, autofit } = await import('/src/rende r/slide.ts')
+  const { renderSlide, autofit } = await import('/src/render/slide.ts')
   const { ARCHETYPES } = await import('/src/ai/prompts.ts')
   const { THEMES } = await import('/src/design/themes.ts')
   const { defaultSettings } = await import('/src/model/types.ts')

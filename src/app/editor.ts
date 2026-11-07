@@ -25,7 +25,15 @@ interface ServerDeck extends Omit<Deck, 'createdAt' | 'updatedAt'> {
 export async function renderEditor(id: string) {
   const app = document.getElementById('app')
   if (!app) throw new Error('Missing #app')
-
+if (id === 'local' || !isAuthConfigured()) {
+if (!store.restore()) {
+store.setDeck(demoDeck('obsidian'), { snapshot: false })
+}
+store.resetHistory()
+buildShell()
+wireEditor('local', 1)
+return
+}
   app.innerHTML = `<div class="app-loading"><span class="spin"></span> Loading deck…</div>`
 
   let server: ServerDeck
@@ -77,6 +85,7 @@ function wireEditor(deckId: string, initialRevision: number) {
   }
 
   async function save() {
+if (deckId === 'local' || !isAuthConfigured()) return
     if (saving) {
       queued = true
       return

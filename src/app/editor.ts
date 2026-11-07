@@ -1,4 +1,5 @@
-import { store } from '../store'
+import { demoDeck } from '../model/slides'
+  import { store } from '../store'
 import type { Deck } from '../model/types'
 import { buildShell, renderAll, renderSelection, syncLayout } from '../ui/shell'
 import { renderCanvas, refreshScale } from '../ui/canvas'
@@ -12,7 +13,7 @@ import { toggleSorter, closeSorter } from '../ui/sorter'
 import { openSettings } from '../ui/settings'
 import { popover, toast } from '../ui/dom'
 import { api, ApiError } from './api'
-import { mountUserButton } from './auth'
+import { isAuthConfigured, mountUserButton } from './auth'
 import { navigate } from './router'
 
 interface ServerDeck extends Omit<Deck, 'createdAt' | 'updatedAt'> {

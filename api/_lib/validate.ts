@@ -20,7 +20,7 @@ export async function readJson<T extends z.ZodType>(
   if (!parsed.success) {
     const issues = parsed.error.issues
       .slice(0, 6)
-      .map((i) => `${i.path.join(.') || 'body'}}: ${i.message}`)
+      .map((i) => (i.path.join('.') || 'body') + ': ' + i.message)
       .join('; ')
     throw new HttpError(422, issues || 'Invalid request body')
   }

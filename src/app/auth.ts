@@ -43,7 +43,7 @@ export function initClerk(): Promise<Clerk> {
   pending = (async () => {
     const publishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
     if (!publishableKey) {
-      throw new Error('Missing VITE_CLERK_PUBLISHABLE_KEY. Add it to .env.local and restart.')
+      return null as unknown as Clerkt
     }
 
     const clerkDomain = atob(publishableKey.split('_')[2]).slice(0, -1)
@@ -79,6 +79,10 @@ export function clerk(): Clerk {
 export function isSignedIn(): boolean {
   return Boolean(instance?.user)
 }
+export function isAuthConfigured(): boolean {
+    return Boolean(import.meta.env.VITE_CLERK_PUBLISHABLE_KEY)
+}
+
 
 export function currentUser() {
   return instance?.user ?? null
@@ -89,6 +93,7 @@ export async function getToken(): Promise<string | null> {
 }
 
 export function mountUserButton(el: HTMLElement) {
+    if (!instance) return 
   clerk().mountUserButton(el as HTMLDivElement, {
     appearance: {
       variables: { colorPrimary: '#8f86ff' },

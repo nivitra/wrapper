@@ -1,7 +1,7 @@
 import './styles/app.css'
 import './styles/slide.css'
 
-import { initClerk, isSignedIn, mountAuthPage } from './app/auth'
+import { initClerk, isAuthConfigured, isSignedIn, mountAuthPage } from './app/auth'
 import { renderDashboard } from './app/dashboard'
 import { renderEditor } from './app/editor'
 import { navigate, parseRoute, redirectUrl, startRouter } from './app/router'
@@ -12,6 +12,10 @@ if (!app) throw new Error('Missing #app')
 await initClerk()
 
 startRouter((route) => {
+if (!isAuthConfigured()) {
+void renderEditor('local')
+return
+}
   if (!isSignedIn()) {
     if (route.name === 'sign-in' || route.name === 'sign-up') {
       mountAuthPage(app, route.name, { redirectUrl: redirectUrl() })

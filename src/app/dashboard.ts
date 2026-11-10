@@ -1,5 +1,5 @@
 import type { DeckSettings, Slide } from '../model/types'
-import { demoDeck } from '../model/slides'
+  import { demoDeck } from '../model/slides'
 import { getTheme } from '../design/themes'
 import { toast } from '../ui/dom'
 import { api, ApiError } from './api'

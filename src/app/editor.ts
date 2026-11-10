@@ -1,4 +1,5 @@
-import { store } from '../store'
+import { demoDeck } from '../model/slides'
+  import { store } from '../store'
 import type { Deck } from '../model/types'
 import { buildShell, renderAll, renderSelection, syncLayout } from '../ui/shell'
 import { renderCanvas, refreshScale } from '../ui/canvas'
@@ -12,7 +13,7 @@ import { toggleSorter, closeSorter } from '../ui/sorter'
 import { openSettings } from '../ui/settings'
 import { popover, toast } from '../ui/dom'
 import { api, ApiError } from './api'
-import { mountUserButton } from './auth'
+import { isAuthConfigured, mountUserButton } from './auth'
 import { navigate } from './router'
 
 interface ServerDeck extends Omit<Deck, 'createdAt' | 'updatedAt'> {
@@ -24,7 +25,15 @@ interface ServerDeck extends Omit<Deck, 'createdAt' | 'updatedAt'> {
 export async function renderEditor(id: string) {
   const app = document.getElementById('app')
   if (!app) throw new Error('Missing #app')
-
+if (id === 'local' || !isAuthConfigured()) {
+if (!store.restore()) {
+store.setDeck(demoDeck('obsidian'), { snapshot: false })
+}
+store.resetHistory()
+buildShell()
+wireEditor('local', 1)
+return
+}
   app.innerHTML = `<div class="app-loading"><span class="spin"></span> Loading deck…</div>`
 
   let server: ServerDeck
@@ -76,6 +85,7 @@ function wireEditor(deckId: string, initialRevision: number) {
   }
 
   async function save() {
+if (deckId === 'local' || !isAuthConfigured()) return
     if (saving) {
       queued = true
       return
